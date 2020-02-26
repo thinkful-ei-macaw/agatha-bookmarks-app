@@ -1,0 +1,19 @@
+
+h1 {
+    display: flex;
+    justify-content: center;
+}
+
+main {
+    background-color: gainsboro;
+}
+
+article {
+    display: flex;
+    flex-direction: column;
+}
+
+footer {
+    display: flex;
+    justify-content: center;
+}

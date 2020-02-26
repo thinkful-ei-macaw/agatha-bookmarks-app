@@ -9,18 +9,16 @@ const fetchFn = function (...params) {
                 return response.json();
             }
             throw new Error(response.statusText);
+        });
+        .then(data => {
+            if(error){
+                error.message = data.message;
+            }
+            return data;
         })
-        .then(responseJson => displayResults(responseJson))
-        .catch(err => {
-            $('')
-        })
-
 }
 
-const displayResults = function(){
-    
-}
 
 export default {
-    api
+
 }
