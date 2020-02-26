@@ -4,7 +4,7 @@ import api from './api';
 import store from './store';
 
 
-
+//Render Functions
 
 const renderBaseLayout = function(){
 //this function will be called immediately to render the basic appearance
@@ -18,7 +18,33 @@ const renderCreateBookmark = function(){
 //to add a new bookmark to the display
 }
 
-const renderBookmarkDetail = function(){
-//this function will render a section of the page that displays details
-//about the specific bookmark
+
+//Event Handler Functions
+
+const eventHandlerCreate = function(){
+//this function will handle the creation of a new bookmark
+//that will appear at the bottom of the list
 }
+
+const eventHandlerRemoveAll = function(){
+
+}
+
+const eventHandlerRemoveOne = function(){
+
+}
+
+const eventHandlerEditBookmark = function(){
+
+}
+
+const eventHandlerCancelEdit = function(){
+
+}
+
+const eventHandlerSortBy = function(){
+
+}
+
+
+// 
