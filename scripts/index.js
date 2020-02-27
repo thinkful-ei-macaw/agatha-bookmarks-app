@@ -16,6 +16,7 @@ const renderBaseLayout = function(){
 const renderCreateBookmark = function(){
 //this function will render the section of the page that allows a user
 //to add a new bookmark to the display
+    generateAddForm();
 }
 
 
@@ -24,30 +25,44 @@ const renderCreateBookmark = function(){
 const eventHandlerCreate = function(){
 //this function will handle the creation of a new bookmark
 //that will appear at the bottom of the list
-    event.preventDefault();
-    $('main').on('click', '', function(){
-
-})
+    $('main').on('click', '.add', event => {
+        event.preventDefault();
+        renderCreateBookmark();
+});
 }
 
 const eventHandlerRemoveAll = function(){
-    event.preventDefault();
+    $('main').on('click', '.clear', event =>{
+        event.preventDefault();
+        //remove everything between the article tags
+    })
 }
 
 const eventHandlerRemoveOne = function(){
-    event.preventDefault();
+    $('main').on('click', '.remove', event =>{
+        event.preventDefault();
+        //remove specific bookmark
+    })
 }
 
 const eventHandlerEditBookmark = function(){
-    event.preventDefault();
+    $('main').on('click', '.edit', event =>{
+        event.preventDefault();
+        //allows description to be editted
+    })
 }
 
 const eventHandlerCancelEdit = function(){
-    event.preventDefault();
+    $('main').on('click', '.cancel', event =>{
+        event.preventDefault();
+        //return to landing render.
+    })
 }
 
 const eventHandlerSortBy = function(){
-
+    $('main').on('', '.sortby', event =>{
+        event.preventDefault();
+    })
 }
 
 
@@ -101,12 +116,36 @@ const generateLanding = function(){
 }
 
 const generateAddForm = function(){
-    
+    $('fieldset').replaceWith(`
+        <form class='addform'>
+                <label>Title</label>
+                <input>
+                <label>URL</label>
+                <input>
+                <label>Description</label>
+                <input>
+            <div class='ratingradio'>
+                <h3>Rating</h3>
+                <label><input type='radio' value='one star' required>1 Star</label>
+                <label><input type='radio' value='two star' required>2 Stars</label>
+                <label><input type='radio' value='three star' required>3 Stars</label>
+                <label><input type='radio' value='four star' required>4 Stars</label>
+                <label><input type='radio' value='five star' required>5 Stars</label>
+            </div>
+        <button class='add'>Add Bookmark</button>
+        <button class='cancel'>Cancel</button>
+        </form>
+    `)
 }
 
-const toggleAdd = function(){
-
+const eventHandlers = function(){
+    eventHandlerCancelEdit();
+    eventHandlerCreate();
+    eventHandlerRemoveAll();
+    eventHandlerEditBookmark();
+    eventHandlerRemoveOne();
+    eventHandlerSortBy();
 }
 
-
-renderBaseLayout();
+$(eventHandlers);
+$(renderBaseLayout);
