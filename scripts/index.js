@@ -75,7 +75,7 @@ const generateLanding = function(){
         <button class='clear'>Remove all Bookmarks</button>
         <select class='sortby'>Minimum Rating</select>
             <article class='booktabs'>
-                ${}
+            
             </article>`);
 }
 
