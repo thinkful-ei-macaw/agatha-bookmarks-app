@@ -4,8 +4,13 @@ h1 {
     justify-content: center;
 }
 
+h1, h2, h3 {
+    font-family: 'Anton';
+}
+
 main {
     background-color: gainsboro;
+    font-family: 'Montserrat';
 }
 
 article {

@@ -1,4 +1,5 @@
 'use strict'
+/* global $ */
 
 import api from './api';
 import store from './store';
@@ -25,7 +26,7 @@ const eventHandlerCreate = function(){
 //this function will handle the creation of a new bookmark
 //that will appear at the bottom of the list
     $('main').on('click', '', function(){
-
+        
 })
 }
 
