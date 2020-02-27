@@ -26,7 +26,21 @@ const store = {
     filter: 0
 }
 
+const addItem = function(item){
+    store.bookmarks.push(item);
+}
+
+const setErr = function(e){
+    store.error = e;
+}
+
+const findById = function(id){
+    return store.bookmarks.find(currentItem => currentItem.id === id);
+}
 
 export default {
-    store
+    store,
+    addItem,
+    setErr,
+    findById
 }

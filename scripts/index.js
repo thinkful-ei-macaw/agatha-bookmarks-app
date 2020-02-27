@@ -19,6 +19,9 @@ const renderCreateBookmark = function(){
     generateAddForm();
 }
 
+const renderEmptyLayout = function(){
+    generateEmpty();
+}
 
 //Event Handler Functions
 
@@ -34,7 +37,7 @@ const eventHandlerCreate = function(){
 const eventHandlerRemoveAll = function(){
     $('main').on('click', '.clear', event =>{
         event.preventDefault();
-        //remove everything between the article tags
+        renderEmptyLayout();
     })
 }
 
@@ -55,7 +58,7 @@ const eventHandlerEditBookmark = function(){
 const eventHandlerCancelEdit = function(){
     $('main').on('click', '.cancel', event =>{
         event.preventDefault();
-        //return to landing render.
+        renderBaseLayout();
     })
 }
 
@@ -99,20 +102,14 @@ const generateLanding = function(){
                     <button class='edit'>Edit Bookmark</button>
                 </div>
                 <div class='wrapper'>
-                    <h2>Example3</h2>
-                    <details class='info'>Example Description</details>
-                    <div class='stars'>
-                        <h3>5 star(s)</h3>
-                        <b>*</b>
-                        <b>*</b>
-                        <b>*</b>
-                        <b>*</b>
-                        <b>*</b>
-                    </div>
                     <button class='remove'>Remove Bookmark</button>
                     <button class='edit'>Edit Bookmark</button>
                 </div>
             </article>`);
+}
+
+const generateBookmark = function(){
+    $('.wrapper')
 }
 
 const generateAddForm = function(){
@@ -136,6 +133,10 @@ const generateAddForm = function(){
         <button class='cancel'>Cancel</button>
         </form>
     `)
+}
+
+const generateEmpty = function(){
+    
 }
 
 const eventHandlers = function(){
