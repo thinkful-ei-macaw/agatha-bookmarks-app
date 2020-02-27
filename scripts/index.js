@@ -5,6 +5,8 @@ import api from './api.js';
 import store from './store.js';
 
 
+//Currently non-functional, would greatly appreciate granular feedback 
+
 //Event Handler Functions
 
 const eventHandlerCreate = function(){
@@ -26,7 +28,11 @@ const eventHandlerRemoveAll = function(){
 const eventHandlerRemoveOne = function(){
     $('main').on('click', '.remove', event =>{
         event.preventDefault();
-        //remove specific bookmark
+        let id = getId(event.target);
+        api.deleteItem(id)
+            .then(() =>{
+                store.findById(id);
+            })
     })
 }
 
@@ -69,7 +75,7 @@ const generateLanding = function(){
         <button class='clear'>Remove all Bookmarks</button>
         <select class='sortby'>Minimum Rating</select>
             <article class='booktabs'>
-                
+                ${}
             </article>`);
 }
 
@@ -128,14 +134,10 @@ const generateEmpty = function(){
 //Render Functions
 
 const renderBaseLayout = function(){
-    //this function will be called immediately to render the basic appearance
-    //of the bookmark page
         generateLanding();
     }
     
     const renderCreateBookmark = function(){
-    //this function will render the section of the page that allows a user
-    //to add a new bookmark to the display
         generateAddForm();
     }
     
