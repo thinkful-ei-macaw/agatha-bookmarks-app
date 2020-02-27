@@ -1,4 +1,4 @@
-import defaultExport from './api';
+import api from './api.js';
 
 const store = {
     bookmarks: [
@@ -10,11 +10,11 @@ const store = {
         description: 'An online repository that allows for ease of collaboration, and creates a history of changes that allow for better debugging and editing.'
         },
         {
-        title: '',
+        title: 'Hive Workshop',
         id: '',
-        url: '',
-        rating: '',
-        description: ''
+        url: 'https://www.hiveworkshop.com/',
+        rating: '5',
+        description: 'A site dedicated to Warcraft 3, serving as the primary destination for custom content such as; maps, skins, models, icons, tools, and more.'
         },
         {
 
@@ -26,9 +26,6 @@ const store = {
     filter: 0
 }
 
-const addBookmark = function(bookmarks){
-
-}
 
 export default {
     store

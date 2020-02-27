@@ -14,7 +14,7 @@
         <button class='clear'>Remove all Bookmarks</button>
         <select class='sortby'>Minimum Rating</select>
             <article class='booktabs'>
-                <div>
+                <div class='wrapper'>
                     <h2>Example1</h2>
                     <details class='info'>Example Description</details>
                     <div class='stars'>
@@ -25,7 +25,7 @@
                     </div>
                     <button class='remove'>Remove Bookmark</button>
                     <button class='edit'>Edit Bookmark</button>
-                </div>
+                </div class='wrapper'>
                 <div>
                     <h2>Example2</h2>
                     <details class='info'>Example Description</details>
@@ -35,7 +35,7 @@
                     </div>
                     <button class='remove'>Remove Bookmark</button>
                     <button class='edit'>Edit Bookmark</button>
-                </div>
+                </div class='wrapper'>
                 <div>
                     <h2>Example3</h2>
                     <details class='info'>Example Description</details>
@@ -57,3 +57,30 @@
     </footer>
 </body>
 </html>
+
+
+<!--const store = {
+    bookmarks: [
+        {
+        title: 'Github',
+        id: '',
+        url: 'https://github.com/',
+        rating: 4,
+        description: 'An online repository that allows for ease of collaboration, and creates a history of changes that allow for better debugging and editing.'
+        },
+        {
+        title: '',
+        id: '',
+        url: '',
+        rating: '',
+        description: ''
+        },
+        {
+
+        },
+    ],
+    adding: false,
+    editing: false,
+    error: null,
+    filter: 0
+}

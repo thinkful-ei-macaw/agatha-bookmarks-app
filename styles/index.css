@@ -1,10 +1,13 @@
+body {
+    background-color: white;
+}
 
 h1 {
     display: flex;
     justify-content: center;
 }
 
-h1, h2, h3 {
+h1, h2 {
     font-family: 'Anton';
 }
 
@@ -16,6 +19,8 @@ main {
 article {
     display: flex;
     flex-direction: column;
+    justify-content: space-evenly, center;
+    padding: 5px 5px 5px 5px;
 }
 
 footer {

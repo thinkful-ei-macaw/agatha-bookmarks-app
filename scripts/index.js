@@ -1,8 +1,8 @@
 'use strict'
 /* global $ */
 
-import api from './api';
-import store from './store';
+import api from './api.js';
+import store from './store.js';
 
 
 //Render Functions
@@ -10,9 +10,8 @@ import store from './store';
 const renderBaseLayout = function(){
 //this function will be called immediately to render the basic appearance
 //of the bookmark page
+    generateLanding();
 }
-
-renderBaseLayout();
 
 const renderCreateBookmark = function(){
 //this function will render the section of the page that allows a user
@@ -25,25 +24,26 @@ const renderCreateBookmark = function(){
 const eventHandlerCreate = function(){
 //this function will handle the creation of a new bookmark
 //that will appear at the bottom of the list
+    event.preventDefault();
     $('main').on('click', '', function(){
-        
+
 })
 }
 
 const eventHandlerRemoveAll = function(){
-
+    event.preventDefault();
 }
 
 const eventHandlerRemoveOne = function(){
-
+    event.preventDefault();
 }
 
 const eventHandlerEditBookmark = function(){
-
+    event.preventDefault();
 }
 
 const eventHandlerCancelEdit = function(){
-
+    event.preventDefault();
 }
 
 const eventHandlerSortBy = function(){
@@ -53,39 +53,60 @@ const eventHandlerSortBy = function(){
 
 // Template Generation Functions
 
-const generateAddBookmark = function(){
-    return `
+const generateLanding = function(){
+    $('main').html(`
     <fieldset>
         <button class='add'>Add Bookmark</button>
     </fieldset>
-    `;
+        <button class='clear'>Remove all Bookmarks</button>
+        <select class='sortby'>Minimum Rating</select>
+            <article class='booktabs'>
+                <div class='wrapper'>
+                    <h2>Example1</h2>
+                    <details class='info'>Example Description</details>
+                    <div class='stars'>
+                        <h3>3 star(s)</h3>
+                        <b>*</b>
+                        <b>*</b>
+                        <b>*</b>
+                    </div>
+                    <button class='remove'>Remove Bookmark</button>
+                    <button class='edit'>Edit Bookmark</button>
+                </div>
+                <div class='wrapper'>
+                    <h2>Example2</h2>
+                    <details class='info'>Example Description</details>
+                    <div class='stars'>
+                        <h3>1 star(s)</h3>
+                        <b>*</b>
+                    </div>
+                    <button class='remove'>Remove Bookmark</button>
+                    <button class='edit'>Edit Bookmark</button>
+                </div>
+                <div class='wrapper'>
+                    <h2>Example3</h2>
+                    <details class='info'>Example Description</details>
+                    <div class='stars'>
+                        <h3>5 star(s)</h3>
+                        <b>*</b>
+                        <b>*</b>
+                        <b>*</b>
+                        <b>*</b>
+                        <b>*</b>
+                    </div>
+                    <button class='remove'>Remove Bookmark</button>
+                    <button class='edit'>Edit Bookmark</button>
+                </div>
+            </article>`);
 }
 
 const generateAddForm = function(){
-    return `
-    <fieldset>
-        <form class='addform'>
-            <label>Title</label>
-            <input>
-            <label>URL</label>
-            <input>
-            <label>Description</label>
-            <input>
-        <div class='ratingradio'>
-            <h3>Rating</h3>
-            <label><input type='radio' value='one star' required>1 Star</label>
-            <label><input type='radio' value='two star' required>2 Stars</label>
-            <label><input type='radio' value='three star' required>3 Stars</label>
-            <label><input type='radio' value='four star' required>4 Stars</label>
-            <label><input type='radio' value='five star' required>5 Stars</label>
-        </div>
-            <button class='add'>Add Bookmark</button>
-            <button class='add'>Cancel</button>
-        </form>
-    </fieldset>
-    `;
+    
 }
 
 const toggleAdd = function(){
 
 }
+
+
+renderBaseLayout();
