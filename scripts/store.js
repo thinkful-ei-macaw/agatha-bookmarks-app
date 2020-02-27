@@ -38,9 +38,14 @@ const findById = function(id){
     return store.bookmarks.find(currentItem => currentItem.id === id);
 }
 
+const deleteCurrItem = function(id){
+    store.bookmarks = store.bookmarks.filter(currentItem => currentItem.id !== id);
+}
+
 export default {
     store,
     addItem,
     setErr,
-    findById
+    findById,
+    deleteCurrItem
 }
