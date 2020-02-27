@@ -24,7 +24,7 @@ const renderCreateBookmark = function(){
 const eventHandlerCreate = function(){
 //this function will handle the creation of a new bookmark
 //that will appear at the bottom of the list
-$('main').on('click', '', function(){
+    $('main').on('click', '', function(){
 
 })
 }
@@ -86,5 +86,5 @@ const generateAddForm = function(){
 }
 
 const toggleAdd = function(){
-    
+
 }
