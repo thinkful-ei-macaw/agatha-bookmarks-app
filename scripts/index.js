@@ -5,24 +5,6 @@ import api from './api.js';
 import store from './store.js';
 
 
-//Render Functions
-
-const renderBaseLayout = function(){
-//this function will be called immediately to render the basic appearance
-//of the bookmark page
-    generateLanding();
-}
-
-const renderCreateBookmark = function(){
-//this function will render the section of the page that allows a user
-//to add a new bookmark to the display
-    generateAddForm();
-}
-
-const renderEmptyLayout = function(){
-    generateEmpty();
-}
-
 //Event Handler Functions
 
 const eventHandlerCreate = function(){
@@ -68,6 +50,14 @@ const eventHandlerSortBy = function(){
     })
 }
 
+// Json
+
+const jsonStringify = function(form){
+    let formData = new FormData(form[0]);
+    let object = {};
+    formData.forEach((val, name) => object[name] = val);
+    return JSON.stringify(object);
+}
 
 // Template Generation Functions
 
@@ -79,37 +69,33 @@ const generateLanding = function(){
         <button class='clear'>Remove all Bookmarks</button>
         <select class='sortby'>Minimum Rating</select>
             <article class='booktabs'>
-                <div class='wrapper'>
-                    <h2>Example1</h2>
-                    <details class='info'>Example Description</details>
-                    <div class='stars'>
-                        <h3>3 star(s)</h3>
-                        <b>*</b>
-                        <b>*</b>
-                        <b>*</b>
-                    </div>
-                    <button class='remove'>Remove Bookmark</button>
-                    <button class='edit'>Edit Bookmark</button>
-                </div>
-                <div class='wrapper'>
-                    <h2>Example2</h2>
-                    <details class='info'>Example Description</details>
-                    <div class='stars'>
-                        <h3>1 star(s)</h3>
-                        <b>*</b>
-                    </div>
-                    <button class='remove'>Remove Bookmark</button>
-                    <button class='edit'>Edit Bookmark</button>
-                </div>
-                <div class='wrapper'>
-                    <button class='remove'>Remove Bookmark</button>
-                    <button class='edit'>Edit Bookmark</button>
-                </div>
+                
             </article>`);
 }
 
-const generateBookmark = function(){
-    $('.wrapper')
+const generateBookmarkStrng = function(){
+    let bookmark = store.bookmarks.filter(bookmarks => bookmarks.rating >= store.filter)
+    bookmark = bookmark.map((bookmark) => generateBookmark(bookmark));
+    return bookmark.join('');
+}
+
+const generateBookmark = function(bookmark){
+    let mark = '';
+    mark = `
+        <div class='wrapper' item-id='${bookmarks.id}>
+        <h2>${bookmarks.title}</h2>
+        <div class='stars'>
+            <h3>${bookmarks.rating} star(s)</h3>
+        </div>
+        <details class='info'>
+            <p class='url'>'${bookmarks.url}'</p>
+            <p class='editable'>${bookmarks.details}</p>
+            <button class='remove'>Remove Bookmark</button>
+            <button class='edit'>Edit Bookmark</button>
+        </details>
+        </div class='wrapper'>
+    `;
+    return mark;
 }
 
 const generateAddForm = function(){
@@ -138,6 +124,26 @@ const generateAddForm = function(){
 const generateEmpty = function(){
     
 }
+
+//Render Functions
+
+const renderBaseLayout = function(){
+    //this function will be called immediately to render the basic appearance
+    //of the bookmark page
+        generateLanding();
+    }
+    
+    const renderCreateBookmark = function(){
+    //this function will render the section of the page that allows a user
+    //to add a new bookmark to the display
+        generateAddForm();
+    }
+    
+    const renderEmptyLayout = function(){
+        generateEmpty();
+    }
+    
+
 
 const eventHandlers = function(){
     eventHandlerCancelEdit();
