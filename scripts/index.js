@@ -17,15 +17,15 @@ const eventHandlerAddNew = function(){
 }
 
 const eventHandlerCreate = function(){
-    $('.wrapper').submit(event =>{
+    $('.addform').submit(event =>{
         event.preventDefault();
-        let form = document.getElementById(``);
+        let form = document.getElementById('newbmk');
         let formData = new FormData(form);
-        const newBookmark = jsonStringify(formData);
+        const newBookmark = bmkObj(formData);
         api.createItem(newBookmark)
             .then(newBookmark => store.addItem(newBookmark))
             .then(() => renderBaseLayout())
-    })
+    });
 }
 
 const eventHandlerRemoveAll = function(){
@@ -67,13 +67,10 @@ const eventHandlerSortBy = function(){
     })
 }
 
-// Json
-
-const jsonStringify = function(form){
-    let formData = new FormData(form[0]);
-    let object = {};
+const bmkObj = function(formData){
+    let obj = {};
     formData.forEach((val, name) => object[name] = val);
-    return JSON.stringify(object);
+    return obj;
 }
 
 // Template Generation Functions
@@ -141,7 +138,7 @@ const generateAddForm = function(){
                     <option value='5'>5</option>
                 </select>
         </legend>
-                <form class='addform'>
+                <form class='addform' id='newbmk'>
                         <label>Title</label>
                         <input>
                         <label>URL</label>

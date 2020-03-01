@@ -26,7 +26,7 @@ const deleteCurrItem = function(id){
 
 const populate = function(){
     return api.getItems().then(bookmarks => {
-        store.booksmarks.forEach(bm => this.addItem(bm));
+        store.bookmarks.forEach(bm => this.addItem(bm));
     });
 }
 
