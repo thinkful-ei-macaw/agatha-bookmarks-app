@@ -1,5 +1,6 @@
 body {
-    background-color: white;
+    background-color: #F1FFD9;
+    color: #9E7E7D;
 }
 
 h1 {
@@ -12,8 +13,10 @@ h1, h2 {
 }
 
 main {
-    background-color: gainsboro;
+    background-color: #CC5B58;
     font-family: 'Montserrat';
+    color: #CBCC66;
+    padding: 5px 5px 5px 5px;
 }
 
 article {
@@ -23,9 +26,14 @@ article {
     padding: 5px 5px 5px 5px;
 }
 
+fieldset {
+
+}
+
 footer {
     display: flex;
     justify-content: center;
+    font-weight: bolder;
 }
 
 @media (max-width: 600px){

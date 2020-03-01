@@ -69,14 +69,18 @@ const jsonStringify = function(form){
 
 const generateLanding = function(){
     $('main').html(`
-    <fieldset>
-        <button class='add'>Add Bookmark</button>
-    </fieldset>
-        <button class='clear'>Remove all Bookmarks</button>
-        <select class='sortby'>Minimum Rating</select>
-            <article class='booktabs'>
-            
-            </article>`);
+    <div class='formWrap'>
+        <fieldset>
+            <legend>
+                <button class='add'>Add Bookmark</button>
+                <button class='clear'>Remove all Bookmarks</button>
+                <select class='sortby'>Minimum Rating</select>
+            </legend>
+        </fieldset>
+    </div>
+                <article class='booktabs'>
+                
+                </article>`);
 }
 
 const generateBookmarkStrng = function(){
@@ -105,25 +109,31 @@ const generateBookmark = function(bookmark){
 }
 
 const generateAddForm = function(){
-    $('fieldset').replaceWith(`
-        <form class='addform'>
-                <label>Title</label>
-                <input>
-                <label>URL</label>
-                <input>
-                <label>Description</label>
-                <input>
-            <div class='ratingradio'>
-                <h3>Rating</h3>
-                <label><input type='radio' value='one star' required>1 Star</label>
-                <label><input type='radio' value='two star' required>2 Stars</label>
-                <label><input type='radio' value='three star' required>3 Stars</label>
-                <label><input type='radio' value='four star' required>4 Stars</label>
-                <label><input type='radio' value='five star' required>5 Stars</label>
-            </div>
-        <button class='add'>Add Bookmark</button>
-        <button class='cancel'>Cancel</button>
-        </form>
+    $('.formWrap').replaceWith(`
+    <fieldset>
+        <legend>
+            <button class='add'>Add Bookmark</button>
+            <button class='cancel'>Cancel</button>
+            <button class='clear'>Remove all Bookmarks</button>
+            <select class='sortby'>Minimum Rating</select>
+        </legend>
+                <form class='addform'>
+                        <label>Title</label>
+                        <input>
+                        <label>URL</label>
+                        <input>
+                        <label>Description</label>
+                        <input>
+                    <div class='ratingradio'>
+                        <h3>Rating</h3>
+                        <label><input type='radio' value='one star' required>1 Star</label>
+                        <label><input type='radio' value='two star' required>2 Stars</label>
+                        <label><input type='radio' value='three star' required>3 Stars</label>
+                        <label><input type='radio' value='four star' required>4 Stars</label>
+                        <label><input type='radio' value='five star' required>5 Stars</label>
+                    </div>
+                </form>
+    </fieldset>
     `)
 }
 
