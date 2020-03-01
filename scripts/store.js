@@ -24,12 +24,29 @@ const deleteCurrItem = function(id){
     store.bookmarks = store.bookmarks.filter(currentItem => currentItem.id !== id);
 }
 
+const populate = function(){
+    return api.getItems().then(bookmarks => {
+        store.booksmarks.forEach(bm => this.addItem(bm));
+    });
+}
+
+const setFilter = function(rating){
+    store.filter = rating;
+}
+
+const getFilter = function(){
+    return store.filter;
+}
+
 export default {
     store,
     addItem,
     setErr,
     findById,
-    deleteCurrItem
+    deleteCurrItem,
+    populate,
+    setFilter,
+    getFilter
 }
 
 /*

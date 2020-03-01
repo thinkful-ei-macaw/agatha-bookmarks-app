@@ -19,7 +19,7 @@ const eventHandlerAddNew = function(){
 const eventHandlerCreate = function(){
     $('.wrapper').submit(event =>{
         event.preventDefault();
-        let form = document.getElementById(`${bookmarks.id}`);
+        let form = document.getElementById(``);
         let formData = new FormData(form);
         const newBookmark = jsonStringify(formData);
         api.createItem(newBookmark)
@@ -179,7 +179,7 @@ const renderCreateBookmark = function(){
 }
     
 const renderEmptyLayout = function(){
-    generateEmpty();
+    render('main', generateEmpty());
 }
     
 const eventHandlers = function(){
@@ -190,5 +190,11 @@ const eventHandlers = function(){
     eventHandlerSortBy();
 }
 
-$(eventHandlers);
-$(renderBaseLayout);
+const initiate = function(){
+    store.populate()
+        .then(() => renderBaseLayout())
+        .then(() => eventHandlers())
+    store.setFilter(1);
+}
+
+$(initiate);
