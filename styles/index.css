@@ -26,14 +26,11 @@ article {
     padding: 5px 5px 5px 5px;
 }
 
-fieldset {
-
-}
-
 footer {
     display: flex;
     justify-content: center;
     font-weight: bolder;
+    margin-top: 8px;
 }
 
 @media (max-width: 600px){

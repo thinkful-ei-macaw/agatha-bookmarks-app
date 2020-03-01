@@ -3,9 +3,7 @@
 
 import api from './api.js';
 import store from './store.js';
-
-
-//Currently non-functional, would greatly appreciate granular feedback 
+ 
 
 //Event Handler Functions
 
@@ -15,6 +13,7 @@ const eventHandlerCreate = function(){
     $('main').on('click', '.add', event => {
         event.preventDefault();
         renderCreateBookmark();
+        editing = true;
 });
 }
 
@@ -47,6 +46,7 @@ const eventHandlerCancelEdit = function(){
     $('main').on('click', '.cancel', event =>{
         event.preventDefault();
         renderBaseLayout();
+        editing = false;
     })
 }
 
@@ -68,19 +68,27 @@ const jsonStringify = function(form){
 // Template Generation Functions
 
 const generateLanding = function(){
-    $('main').html(`
+    let html = `
     <div class='formWrap'>
         <fieldset>
             <legend>
                 <button class='add'>Add Bookmark</button>
                 <button class='clear'>Remove all Bookmarks</button>
-                <select class='sortby'>Minimum Rating</select>
+                <label for='sortby'>Sort by Rating:</label>
+                <select class='sortby'>
+                    <option value='1'>1</option>
+                    <option value='2'>2</option>
+                    <option value='3'>3</option>
+                    <option value='4'>4</option>
+                    <option value='5'>5</option>
+                </select>
             </legend>
         </fieldset>
     </div>
-                <article class='booktabs'>
+            <article class='booktabs'>
                 
-                </article>`);
+            </article>`;
+    return html;
 }
 
 const generateBookmarkStrng = function(){
@@ -109,7 +117,7 @@ const generateBookmark = function(bookmark){
 }
 
 const generateAddForm = function(){
-    $('.formWrap').replaceWith(`
+    let html = `
     <fieldset>
         <legend>
             <button class='add'>Add Bookmark</button>
@@ -133,8 +141,8 @@ const generateAddForm = function(){
                         <label><input type='radio' value='five star' required>5 Stars</label>
                     </div>
                 </form>
-    </fieldset>
-    `)
+    </fieldset>`
+    return html;
 }
 
 const generateEmpty = function(){
@@ -143,20 +151,22 @@ const generateEmpty = function(){
 
 //Render Functions
 
+const render = function(target, component){
+    $(target).html(component);
+}
+
 const renderBaseLayout = function(){
-        generateLanding();
-    }
+    render('main', generateLanding());
+}
     
-    const renderCreateBookmark = function(){
-        generateAddForm();
-    }
+const renderCreateBookmark = function(){
+    render('.formWrap', generateAddForm());
+}
     
-    const renderEmptyLayout = function(){
-        generateEmpty();
-    }
+const renderEmptyLayout = function(){
+    generateEmpty();
+}
     
-
-
 const eventHandlers = function(){
     eventHandlerCancelEdit();
     eventHandlerCreate();

@@ -5,9 +5,9 @@ const apiUrl = 'https://thinkful-list-api.herokuapp.com/agatha/bookmarks';
 
 
 
-const fetchFn = function (params) {
+const fetchFn = function (...params) {
     let error;
-    return fetch(params)
+    return fetch(...params)
         .then(response => {
             if(!response.ok){
                 error = {code: response.status};
