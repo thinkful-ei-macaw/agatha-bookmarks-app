@@ -47,3 +47,4 @@ export default {
         rating: '5',
         description: 'A site dedicated to Warcraft 3, serving as the primary destination for custom content such as; maps, skins, models, icons, tools, and more.'
         }
+*/

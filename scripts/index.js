@@ -7,14 +7,25 @@ import store from './store.js';
 
 //Event Handler Functions
 
-const eventHandlerCreate = function(){
-//this function will handle the creation of a new bookmark
-//that will appear at the bottom of the list
-    $('main').on('click', '.add', event => {
-        event.preventDefault();
+
+const eventHandlerAddNew = function(){
+    $('main').on('click', '.add', () => {
         renderCreateBookmark();
-        editing = true;
-});
+        eventHandlerCreate();
+        eventHandlerCancelEdit();
+    });
+}
+
+const eventHandlerCreate = function(){
+    $('.wrapper').submit(event =>{
+        event.preventDefault();
+        let form = document.getElementById(`${bookmarks.id}`);
+        let formData = new FormData(form);
+        const newBookmark = jsonStringify(formData);
+        api.createItem(newBookmark)
+            .then(newBookmark => store.addItem(newBookmark))
+            .then(() => renderBaseLayout())
+    })
 }
 
 const eventHandlerRemoveAll = function(){
@@ -97,9 +108,8 @@ const generateBookmarkStrng = function(){
     return bookmark.join('');
 }
 
-const generateBookmark = function(bookmark){
-    let mark = '';
-    mark = `
+const generateBookmark = function(){
+    return `
         <div class='wrapper' item-id='${bookmarks.id}>
         <h2>${bookmarks.title}</h2>
         <div class='stars'>
@@ -113,17 +123,23 @@ const generateBookmark = function(bookmark){
         </details>
         </div class='wrapper'>
     `;
-    return mark;
 }
 
 const generateAddForm = function(){
-    let html = `
+    return `
     <fieldset>
         <legend>
-            <button class='add'>Add Bookmark</button>
+            <button class='addNew'>Add Bookmark</button>
             <button class='cancel'>Cancel</button>
             <button class='clear'>Remove all Bookmarks</button>
-            <select class='sortby'>Minimum Rating</select>
+            <label for='sortby'>Sort by Rating:</label>
+                <select class='sortby'>
+                    <option value='1'>1</option>
+                    <option value='2'>2</option>
+                    <option value='3'>3</option>
+                    <option value='4'>4</option>
+                    <option value='5'>5</option>
+                </select>
         </legend>
                 <form class='addform'>
                         <label>Title</label>
@@ -141,8 +157,7 @@ const generateAddForm = function(){
                         <label><input type='radio' value='five star' required>5 Stars</label>
                     </div>
                 </form>
-    </fieldset>`
-    return html;
+    </fieldset>`;
 }
 
 const generateEmpty = function(){
@@ -168,8 +183,7 @@ const renderEmptyLayout = function(){
 }
     
 const eventHandlers = function(){
-    eventHandlerCancelEdit();
-    eventHandlerCreate();
+    eventHandlerAddNew();
     eventHandlerRemoveAll();
     eventHandlerEditBookmark();
     eventHandlerRemoveOne();
