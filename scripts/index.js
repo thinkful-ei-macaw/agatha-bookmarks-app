@@ -124,7 +124,7 @@ const generateLanding = function(){
         } else {
           html += `
                 <li data-item-id="${bm.id}" class="bmkItem">
-                <button class="bm-expand js-bm-expand" role="button">
+                <button class="toggle" role="button">
                     <span class="bmkTitle">${bm.title}</span>
                     <span class="bmkRating">${'★'.repeat(bm.rating)}</span>
                 </button>
@@ -138,6 +138,7 @@ const generateLanding = function(){
 
 const generateAddForm = function(){
     return `
+    <form class='formWrap'>
     <fieldset>
         <legend>
             <button class='addNew'>Add Bookmark</button>
@@ -168,7 +169,8 @@ const generateAddForm = function(){
                 </select>
             </div>
         </form>
-    </fieldset>`;
+    </fieldset>
+    </form>`;
   };
 
 const generateEmpty = function(){
@@ -196,7 +198,6 @@ const eventHandlers = function(){
     eventHandlerRemoveAll();
     eventHandlerEditBookmark();
     eventHandlerRemoveOne();
-    eventHandlerSortBy();
 }
 
 const initiate = function(){
@@ -206,5 +207,4 @@ const initiate = function(){
     store.setFilter(1);
 }
 
-$(eventHandlers);
 $(initiate);
