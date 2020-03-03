@@ -36,12 +36,23 @@ const eventHandlerRemoveAll = function(){
 const eventHandlerRemoveOne = function(){
     $('main').on('click', '.delete', event =>{
         event.stopPropagation();
-        let id = getId(event.currentTarget);
+        const id = getId(event.currentTarget);
         api.deleteItem(id)
             .then(() => store.deleteCurrItem(id))
-            .then(() => renderBaseLayout());
+            .then(() => renderBaseLayout())
+            .catch(error => renderError(error));
     });
 };
+
+const eventHandlerEditClick = function(){
+    $('main').on('click', '.edit', event =>{
+        const id = getId(event.currentTarget);
+        const bookmark = store.findById(id);
+        renderEdit(bookmark);
+        eventHandlerEditBookmark(id);
+        eventHandlerCancelEdit();
+    })
+}
 
 const eventHandlerEditBookmark = function(){
     $('.edit').submit(event =>{
@@ -70,7 +81,7 @@ const eventHandlerToggle = function(){
         renderBaseLayout();
         eventHandlerClose();
         eventHandlerRemoveOne();
-        eventHandlerEditBookmark();
+        eventHandlerEditClick();
     });
   };
 
@@ -134,7 +145,7 @@ const generateLanding = function(){
           html += `
             <li data-item-id="${bm.id}" class="bmkItem">
                 <div class="expanded">
-                    <h2 id="bmktitle">${bm.title}</h2>
+                    <h3 id="bmktitle">${bm.title}</h3>
                     <a class="visit" href="${bm.url}">Visit Site</a>
                     <p>${bm.desc}</p>
                     <button class="edit">Edit</button>
@@ -223,10 +234,6 @@ const generateEdit = function(){
     `;
 };
 
-const generateEmpty = function(){
-    
-}
-
 const render = function(target, component){
     $(target).html(component);
 }
@@ -241,10 +248,6 @@ const renderCreateBookmark = function(){
 
 const renderEdit = function(){
     render('#wrap', generateEdit(store.bookmark));
-}
-    
-const renderEmptyLayout = function(){
-    render('main', generateEmpty());
 }
     
 const eventHandlers = function(){

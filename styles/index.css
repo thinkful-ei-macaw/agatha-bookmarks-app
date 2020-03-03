@@ -12,6 +12,10 @@ h1, h2 {
     font-family: 'Anton';
 }
 
+h3 {
+    font-family: 'Courier New', Courier, monospace;
+}
+
 main {
     background-color: #CC5B58;
     font-family: 'Montserrat';
