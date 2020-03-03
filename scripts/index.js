@@ -75,6 +75,31 @@ const bmkObj = function(formData){
 
 // Template Generation Functions
 
+const generateFilter = function(){
+    let currentRating = store.getFilter();
+    let html = '';
+    for (let i = 1; i <= 5; i++) {
+      html += `
+      <option value="${i}" ${currentRating === i ? 'selected' : ''}>${'★'.repeat(
+        i
+      )}</option>
+     `;
+    }
+    return html;
+  };
+
+const generateRating = currentRating => {
+    let html = '';
+    for (let i = 1; i <= 5; i++) {
+      html += `
+      <option value="${i}" ${
+        Number(currentRating) === i ? 'selected' : ''
+      }>${'★'.repeat(i)}</option>
+     `;
+    }
+    return html;
+};
+
 const generateLanding = function(){
     let html = `
     <div class='formWrap'>
@@ -84,26 +109,48 @@ const generateLanding = function(){
                 <button class='clear'>Remove all Bookmarks</button>
                 <label for='sortby'>Sort by Rating:</label>
                 <select class='sortby'>
-                    <option value='1'>1</option>
-                    <option value='2'>2</option>
-                    <option value='3'>3</option>
-                    <option value='4'>4</option>
-                    <option value='5'>5</option>
+                    ${generateFilter()}
                 </select>
             </legend>
         </fieldset>
-    </div>
-            <article class='booktabs'>
-                
-            </article>`;
+    </form>
+        <ul class="bmkList">`;
+    store.store.bookmarks.forEach(bm => {
+      if (bm.rating >= store.getFilter()) {
+        if (bm.showDetails && bm.rating) {
+          html += `
+            <li data-item-id="${bm.id}" class="bookmark-item js-bookmark-item">
+              <div class="expanded-content js-expanded-content">
+                <h2 id="bm-title js-bm-title">${bm.title}</h2>
+                <a class="anchor-visit" href="${bm.url}">Visit Site</a>
+                <p>${bm.desc}</p>
+                <button class="js-edit-bm edit-bm">Edit</button>
+                <button class="js-close-bm close-bm">Close</button>
+                <button class="js-delete-bm delete-bm">Delete</button>
+              </div>
+            </li>`;
+        } else {
+          html += `
+            <li data-item-id="${bm.id}" class="bookmark-item js-bookmark-item">
+              <button
+                class="bm-expand js-bm-expand"
+                role="button"
+              >
+                <span class="bm-title js-bm-title">${bm.title}</span>
+                <span class="bm-rating js-bm-rating">${'★'.repeat(
+                  bm.rating
+                )}</span>
+              </button>
+            </li>
+          `;
+        }
+      }
+    });
+    html += '</ul>';
     return html;
-}
+  };
 
-const generateBookmarkStrng = function(){
-    let bookmark = store.bookmarks.filter(bookmarks => bookmarks.rating >= store.filter)
-    bookmark = bookmark.map((bookmark) => generateBookmark(bookmark));
-    return bookmark.join('');
-}
+
 
 const generateBookmark = function(){
     return `
@@ -122,6 +169,8 @@ const generateBookmark = function(){
     `;
 }
 
+
+
 const generateAddForm = function(){
     return `
     <fieldset>
@@ -131,31 +180,31 @@ const generateAddForm = function(){
             <button class='clear'>Remove all Bookmarks</button>
             <label for='sortby'>Sort by Rating:</label>
                 <select class='sortby'>
-                    <option value='1'>1</option>
-                    <option value='2'>2</option>
-                    <option value='3'>3</option>
-                    <option value='4'>4</option>
-                    <option value='5'>5</option>
+                ${generateFilter()}
                 </select>
         </legend>
-                <form class='addform' id='newbmk'>
-                        <label>Title</label>
-                        <input>
-                        <label>URL</label>
-                        <input>
-                        <label>Description</label>
-                        <input>
-                    <div class='ratingradio'>
-                        <h3>Rating</h3>
-                        <label><input type='radio' value='one star' required>1 Star</label>
-                        <label><input type='radio' value='two star' required>2 Stars</label>
-                        <label><input type='radio' value='three star' required>3 Stars</label>
-                        <label><input type='radio' value='four star' required>4 Stars</label>
-                        <label><input type='radio' value='five star' required>5 Stars</label>
-                    </div>
-                </form>
+        <form class='addform' id='newbmk'>
+            <div>
+                <label for="title">Title:</label>
+                <input type="text" id="title" name="title" required/>
+            </div>
+            <div>
+                <label for="url">URL:</label>
+                <input type="url" id="url" name="url" required/>
+            </div>
+            <div>
+                <label for="desc">Description:</label>
+                <input type="text" id="desc" name="desc" />
+            </div>
+            <div>
+                <label for="rating">Rating:</label>
+                <select id="ratingradio" name="rating">
+                    ${generateRating(1)}
+                </select>
+            </div>
+        </form>
     </fieldset>`;
-}
+  };
 
 const generateEmpty = function(){
     
