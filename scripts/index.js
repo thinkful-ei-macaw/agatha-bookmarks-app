@@ -60,7 +60,6 @@ const eventHandlerCancelEdit = function(){
     $('main').on('click', '.cancel', event =>{
         event.preventDefault();
         renderBaseLayout();
-        editing = false;
     });
 };
 
@@ -73,6 +72,7 @@ const eventHandlerToggle = function(){
       eventHandlerClose();
       eventHandlerRemoveOne();
       eventHandlerCancelEdit();
+      console.log('help')
     });
   };
 
@@ -197,6 +197,34 @@ const generateAddForm = function(){
     </div>`;
   };
 
+const generateEdit = function(){
+    return `
+        <form id="update" class="updatebmk">
+        <h2>Update bookmark below:</h2>
+        <div>
+            <label for="title">Name:</label>
+            <input type="text" id="title" name="title" value=${bookmark.title} required/>
+        </div>
+        <div>
+            <label for="url">URL:</label>
+            <input type="url" id="url" name="url" value=${bookmark.url} required/>
+        </div>
+        <div>
+            <label for="desc">Description:</label>
+            <input type="text" id="desc" name="desc" value="${bookmark.desc}" />
+        </div>
+        <div>
+            <label for="rating">Rating:</label>
+            <select id="rating" name="rating">
+                ${generateRatingHtml(bookmark.rating)}
+            </select>
+        </div>
+        <button class="editsubmit" type="submit">Update Bookmark</button>
+        <button class="cancel">Cancel</button>
+        </form>
+    `;
+};
+
 const generateEmpty = function(){
     
 }
@@ -211,6 +239,10 @@ const renderBaseLayout = function(){
     
 const renderCreateBookmark = function(){
     render('#wrap', generateAddForm());
+}
+
+const renderEdit = function(){
+    render('#wrap', generateEdit(bookmark));
 }
     
 const renderEmptyLayout = function(){
