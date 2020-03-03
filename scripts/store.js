@@ -5,7 +5,8 @@ const store = {
     adding: false,
     editing: false,
     error: null,
-    filter: 0
+    filter: 0,
+    details: false
 }
 
 const addItem = function(item){
@@ -38,6 +39,15 @@ const getFilter = function(){
     return store.filter;
 }
 
+const toggleDetails = function(id){
+    const currentBookmark = this.findById(id);
+    currentBookmark.details = !currentBookmark.details;
+  };
+  
+  const resetDetails = function() {
+    this.bookmarks.map(e => (e.details = false));
+  };
+
 export default {
     store,
     addItem,
@@ -46,7 +56,9 @@ export default {
     deleteCurrItem,
     populate,
     setFilter,
-    getFilter
+    getFilter,
+    toggleDetails,
+    resetDetails
 }
 
 /*

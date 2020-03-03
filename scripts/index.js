@@ -64,6 +64,28 @@ const eventHandlerCancelEdit = function(){
     });
 };
 
+const eventHandlerToggle = function(){
+    $('.bmkItem').on('click', '.toggle', event => {
+      store.resetDetails();
+      const id = getId(event.currentTarget);
+      store.toggleDetails(id);
+      renderBaseLayout();
+      eventHandlerClose();
+      eventHandlerRemoveOne();
+      eventHandlerCancelEdit();
+    });
+  };
+
+const eventHandlerClose = function(){
+    $('.bmkItem').on('click', '.delete', event => {
+      event.stopPropagation();
+      const id = getId(event.currentTarget);
+      Store.toggleDetails(id);
+      renderBaseLayout();
+      eventHandlerClose();
+    });
+  };
+
 const bmkObj = function(formData){
     let obj = {};
     formData.forEach((val, name) => obj[name] = val);
@@ -199,7 +221,7 @@ const eventHandlers = function(){
     eventHandlerAddNew();
     eventHandlerRemoveAll();
     eventHandlerEditBookmark();
-    eventHandlerRemoveOne();
+    eventHandlerToggle();
 }
 
 const initiate = function(){
