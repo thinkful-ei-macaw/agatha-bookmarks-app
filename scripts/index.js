@@ -11,26 +11,26 @@ const eventHandlerAddNew = function(){
         eventHandlerCreate();
         eventHandlerCancelEdit();
     });
-}
+};
 
 const eventHandlerCreate = function(){
-    $('.addform').submit(event =>{
+    $('#formWrap').submit(event =>{
         event.preventDefault();
-        let form = document.getElementById('newbmk');
+        let form = document.getElementById('#formWrap');
         let formData = new FormData(form);
         const newBookmark = bmkObj(formData);
         api.createItem(newBookmark)
             .then(newBookmark => store.addItem(newBookmark))
             .then(() => renderBaseLayout())
     });
-}
+};
 
 const eventHandlerRemoveAll = function(){
     $('main').on('click', '.clear', event =>{
         event.preventDefault();
         renderEmptyLayout();
-    })
-}
+    });
+};
 
 const eventHandlerRemoveOne = function(){
     $('main').on('click', '.remove', event =>{
@@ -39,29 +39,29 @@ const eventHandlerRemoveOne = function(){
         api.deleteItem(id)
             .then(() =>{
                 store.findById(id);
-            })
-    })
-}
+            });
+    });
+};
 
 const eventHandlerEditBookmark = function(){
     $('.edit').submit(event =>{
         event.preventDefault();
-        let form = document.getElementById('newbmk');
+        let form = document.getElementById('#formWrap');
         let formData = new FormData(form);
         const newBookmark = bmkObj(formData);
         api.updateItem(newBookmark)
             .then(newBookmark => store.addItem(newBookmark))
             .then(() => renderBaseLayout())
     });
-}
+};
 
 const eventHandlerCancelEdit = function(){
     $('main').on('click', '.cancel', event =>{
         event.preventDefault();
         renderBaseLayout();
         editing = false;
-    })
-}
+    });
+};
 
 const bmkObj = function(formData){
     let obj = {};
@@ -76,7 +76,7 @@ const generateFilter = function(){
         html += `<option value="${i}" ${currentRating === i ? 'selected' : ''}>${'★'.repeat(i)}</option>`;
     }
     return html;
-  };
+};
 
 const generateRating = currentRating => {
     let html = '';
@@ -94,7 +94,7 @@ const getId = function(item){
 
 const generateLanding = function(){
     let html = `
-    <div class='formWrap'>
+    <form id='formWrap'>
         <fieldset>
             <legend>
                 <button class='add'>Add Bookmark</button>
@@ -138,7 +138,7 @@ const generateLanding = function(){
 
 const generateAddForm = function(){
     return `
-    <form class='formWrap'>
+    <form id='formWrap'>
     <fieldset>
         <legend>
             <button class='addNew'>Add Bookmark</button>
