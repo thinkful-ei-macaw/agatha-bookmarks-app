@@ -5,9 +5,6 @@ import api from './api.js';
 import store from './store.js';
  
 
-//Event Handler Functions
-
-
 const eventHandlerAddNew = function(){
     $('main').on('click', '.add', () => {
         renderCreateBookmark();
@@ -37,7 +34,7 @@ const eventHandlerRemoveAll = function(){
 
 const eventHandlerRemoveOne = function(){
     $('main').on('click', '.remove', event =>{
-        event.preventDefault();
+        event.stopPropagation();
         let id = getId(event.target);
         api.deleteItem(id)
             .then(() =>{
@@ -47,10 +44,15 @@ const eventHandlerRemoveOne = function(){
 }
 
 const eventHandlerEditBookmark = function(){
-    $('main').on('click', '.edit', event =>{
+    $('.edit').submit(event =>{
         event.preventDefault();
-        //allows description to be editted
-    })
+        let form = document.getElementById('newbmk');
+        let formData = new FormData(form);
+        const newBookmark = bmkObj(formData);
+        api.updateItem(newBookmark)
+            .then(newBookmark => store.addItem(newBookmark))
+            .then(() => renderBaseLayout())
+    });
 }
 
 const eventHandlerCancelEdit = function(){
@@ -73,17 +75,11 @@ const bmkObj = function(formData){
     return obj;
 }
 
-// Template Generation Functions
-
 const generateFilter = function(){
     let currentRating = store.getFilter();
     let html = '';
     for (let i = 1; i <= 5; i++) {
-      html += `
-      <option value="${i}" ${currentRating === i ? 'selected' : ''}>${'★'.repeat(
-        i
-      )}</option>
-     `;
+        html += `<option value="${i}" ${currentRating === i ? 'selected' : ''}>${'★'.repeat(i)}</option>`;
     }
     return html;
   };
@@ -91,11 +87,7 @@ const generateFilter = function(){
 const generateRating = currentRating => {
     let html = '';
     for (let i = 1; i <= 5; i++) {
-      html += `
-      <option value="${i}" ${
-        Number(currentRating) === i ? 'selected' : ''
-      }>${'★'.repeat(i)}</option>
-     `;
+        html += `<option value="${i}" ${Number(currentRating) === i ? 'selected' : '' }>${'★'.repeat(i)}</option>`;
     }
     return html;
 };
@@ -119,30 +111,24 @@ const generateLanding = function(){
       if (bm.rating >= store.getFilter()) {
         if (bm.showDetails && bm.rating) {
           html += `
-            <li data-item-id="${bm.id}" class="bookmark-item js-bookmark-item">
-              <div class="expanded-content js-expanded-content">
-                <h2 id="bm-title js-bm-title">${bm.title}</h2>
-                <a class="anchor-visit" href="${bm.url}">Visit Site</a>
-                <p>${bm.desc}</p>
-                <button class="js-edit-bm edit-bm">Edit</button>
-                <button class="js-close-bm close-bm">Close</button>
-                <button class="js-delete-bm delete-bm">Delete</button>
-              </div>
+            <li data-item-id="${bm.id}" class="bmkItem">
+                <div class="expanded">
+                    <h2 id="bmktitle">${bm.title}</h2>
+                    <a class="visit" href="${bm.url}">Visit Site</a>
+                    <p>${bm.desc}</p>
+                    <button class="edit">Edit</button>
+                    <button class="toggle">Close</button>
+                    <button class="delete">Delete</button>
+                </div>
             </li>`;
         } else {
           html += `
-            <li data-item-id="${bm.id}" class="bookmark-item js-bookmark-item">
-              <button
-                class="bm-expand js-bm-expand"
-                role="button"
-              >
-                <span class="bm-title js-bm-title">${bm.title}</span>
-                <span class="bm-rating js-bm-rating">${'★'.repeat(
-                  bm.rating
-                )}</span>
-              </button>
-            </li>
-          `;
+                <li data-item-id="${bm.id}" class="bmkItem">
+                <button class="bm-expand js-bm-expand" role="button">
+                    <span class="bmkTitle">${bm.title}</span>
+                    <span class="bmkRating">${'★'.repeat(bm.rating)}</span>
+                </button>
+                </li>`;
         }
       }
     });
@@ -168,7 +154,6 @@ const generateBookmark = function(){
         </div class='wrapper'>
     `;
 }
-
 
 
 const generateAddForm = function(){
@@ -210,8 +195,6 @@ const generateEmpty = function(){
     
 }
 
-//Render Functions
-
 const render = function(target, component){
     $(target).html(component);
 }
@@ -243,4 +226,5 @@ const initiate = function(){
     store.setFilter(1);
 }
 
+$(eventHandlers);
 $(initiate);
