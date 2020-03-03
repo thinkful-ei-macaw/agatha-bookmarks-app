@@ -1,6 +1,6 @@
 'use strict'
 
-const apiUrl = 'https://thinkful-list-api.herokuapp.com/agatha/bookmarks';
+const apiUrl = 'https://thinkful-list-api.herokuapp.com/agatha/bookmarks/';
 
 
 
@@ -28,11 +28,11 @@ const getItems = function(){
 }
 
 const createItem = function(name){
-    const newItem = JSON.stringify({name});
+    const newItem = JSON.stringify(name);
     return fetchFn(`${apiUrl}`,{
         method: 'POST',
         headers: {
-            'Content-Type': 'app/json'
+            'Content-Type': 'application/json'
         },
         body: newItem
     })
@@ -43,7 +43,7 @@ const updateItem = function(id, updateData){
     return fetchFn(`${apiUrl}/${id}`, {
         method: 'PATCH',
         headers: {
-            'Content-Type': 'app/json'
+            'Content-Type': 'application/json'
         },
         body: newData
     })

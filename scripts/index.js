@@ -14,11 +14,12 @@ const eventHandlerAddNew = function(){
 };
 
 const eventHandlerCreate = function(){
-    $('#formWrap').submit(event =>{
+    $('#newbmk').submit(event =>{
         event.preventDefault();
-        let form = document.getElementById('#formWrap');
+        let form = document.getElementById('newbmk');
         let formData = new FormData(form);
         const newBookmark = bmkObj(formData);
+        console.log(newBookmark)
         api.createItem(newBookmark)
             .then(newBookmark => store.addItem(newBookmark))
             .then(() => renderBaseLayout())
@@ -46,7 +47,7 @@ const eventHandlerRemoveOne = function(){
 const eventHandlerEditBookmark = function(){
     $('.edit').submit(event =>{
         event.preventDefault();
-        let form = document.getElementById('#formWrap');
+        let form = document.getElementById('newbmk');
         let formData = new FormData(form);
         const newBookmark = bmkObj(formData);
         api.updateItem(newBookmark)
@@ -94,18 +95,18 @@ const getId = function(item){
 
 const generateLanding = function(){
     let html = `
-    <form id='formWrap'>
+    <div id='wrap'>
         <fieldset>
             <legend>
-                <button class='add'>Add Bookmark</button>
+                <button type='submit' class='add'>Add Bookmark</button>
                 <button class='clear'>Remove all Bookmarks</button>
-                <label for='sortby'>Sort by Rating:</label>
+                <label for='sortby'>Sort:</label>
                 <select class='sortby'>
                     ${generateFilter()}
                 </select>
             </legend>
         </fieldset>
-    </form>
+    </div>
         <ul class="bmkList">`;
     store.store.bookmarks.forEach(bm => {
       if (bm.rating >= store.getFilter()) {
@@ -138,13 +139,13 @@ const generateLanding = function(){
 
 const generateAddForm = function(){
     return `
-    <form id='formWrap'>
+    <div id='wrap'>
     <fieldset>
         <legend>
             <button class='addNew'>Add Bookmark</button>
             <button class='cancel'>Cancel</button>
             <button class='clear'>Remove all Bookmarks</button>
-            <label for='sortby'>Sort by Rating:</label>
+            <label for='sortby'>Sort:</label>
                 <select class='sortby'>
                 ${generateFilter()}
                 </select>
@@ -168,9 +169,10 @@ const generateAddForm = function(){
                     ${generateRating(1)}
                 </select>
             </div>
+            <button type='submit' class='please'>Submit</button>
         </form>
     </fieldset>
-    </form>`;
+    </div>`;
   };
 
 const generateEmpty = function(){
@@ -186,7 +188,7 @@ const renderBaseLayout = function(){
 }
     
 const renderCreateBookmark = function(){
-    render('.formWrap', generateAddForm());
+    render('#wrap', generateAddForm());
 }
     
 const renderEmptyLayout = function(){
