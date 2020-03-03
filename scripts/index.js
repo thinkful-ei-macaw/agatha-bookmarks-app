@@ -64,23 +64,22 @@ const eventHandlerCancelEdit = function(){
 };
 
 const eventHandlerToggle = function(){
-    $('.bmkItem').on('click', '.toggle', event => {
-      store.resetDetails();
-      const id = getId(event.currentTarget);
-      store.toggleDetails(id);
-      renderBaseLayout();
-      eventHandlerClose();
-      eventHandlerRemoveOne();
-      eventHandlerCancelEdit();
-      console.log('help')
+    $('#wrap').on('click', '.expand', event => {
+        store.resetDetails();
+        const id = getId(event.currentTarget);
+        store.toggleDetails(id);
+        renderBaseLayout();
+        eventHandlerClose();
+        eventHandlerRemoveOne();
+        eventHandlerCancelEdit();
     });
   };
 
 const eventHandlerClose = function(){
-    $('.bmkItem').on('click', '.delete', event => {
+    $('#wrap').on('click', '.delete', event => {
       event.stopPropagation();
       const id = getId(event.currentTarget);
-      Store.toggleDetails(id);
+      store.toggleDetails(id);
       renderBaseLayout();
       eventHandlerClose();
     });
@@ -140,14 +139,14 @@ const generateLanding = function(){
                     <a class="visit" href="${bm.url}">Visit Site</a>
                     <p>${bm.desc}</p>
                     <button class="edit">Edit</button>
-                    <button class="toggle">Close</button>
+                    <button class="close">Close</button>
                     <button class="delete">Delete</button>
                 </div>
             </li>`;
         } else {
           html += `
                 <li data-item-id="${bm.id}" class="bmkItem">
-                <button class="toggle" role="button">
+                <button class="expand" role="button">
                     <span class="bmkTitle">${bm.title}</span>
                     <span class="bmkRating">${'★'.repeat(bm.rating)}</span>
                 </button>
@@ -200,23 +199,23 @@ const generateAddForm = function(){
 const generateEdit = function(){
     return `
         <form id="update" class="updatebmk">
-        <h2>Update bookmark below:</h2>
+        <h3>Update bookmark below:</h3>
         <div>
             <label for="title">Name:</label>
-            <input type="text" id="title" name="title" value=${bookmark.title} required/>
+            <input type="text" id="title" name="title" value=${store.store.bookmarks.title} required/>
         </div>
         <div>
             <label for="url">URL:</label>
-            <input type="url" id="url" name="url" value=${bookmark.url} required/>
+            <input type="url" id="url" name="url" value=${store.store.bookmarks.url} required/>
         </div>
         <div>
             <label for="desc">Description:</label>
-            <input type="text" id="desc" name="desc" value="${bookmark.desc}" />
+            <input type="text" id="desc" name="desc" value="${store.store.bookmarks.desc}" />
         </div>
         <div>
             <label for="rating">Rating:</label>
             <select id="rating" name="rating">
-                ${generateRatingHtml(bookmark.rating)}
+                ${generateRating(store.store.bookmarks.rating)}
             </select>
         </div>
         <button class="editsubmit" type="submit">Update Bookmark</button>
@@ -242,7 +241,7 @@ const renderCreateBookmark = function(){
 }
 
 const renderEdit = function(){
-    render('#wrap', generateEdit(bookmark));
+    render('#wrap', generateEdit(store.bookmark));
 }
     
 const renderEmptyLayout = function(){

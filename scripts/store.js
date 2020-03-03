@@ -36,15 +36,18 @@ const getFilter = function(){
     return store.filter;
 }
 
+const update = function(id, data) {
+    const currentBookmark = this.findById(id);
+    Object.assign(currentBookmark, data);
+  };
+
 const toggleDetails = function(id){
     const currentBookmark = findById(id);
     currentBookmark.details = !currentBookmark.details;
-    console.log(store)
   };
   
   const resetDetails = function() {
     store.bookmarks.map(e => (e.details = false));
-    console.log(store)
   };
 
 export default {
@@ -57,5 +60,6 @@ export default {
     setFilter,
     getFilter,
     toggleDetails,
-    resetDetails
+    resetDetails,
+    update
 }
