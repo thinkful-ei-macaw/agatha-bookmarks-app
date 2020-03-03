@@ -63,15 +63,9 @@ const eventHandlerCancelEdit = function(){
     })
 }
 
-const eventHandlerSortBy = function(){
-    $('main').on('', '.sortby', event =>{
-        event.preventDefault();
-    })
-}
-
 const bmkObj = function(formData){
     let obj = {};
-    formData.forEach((val, name) => object[name] = val);
+    formData.forEach((val, name) => obj[name] = val);
     return obj;
 }
 
@@ -91,6 +85,12 @@ const generateRating = currentRating => {
     }
     return html;
 };
+
+const getId = function(item){
+    return $(item)
+      .closest('.bmkItem')
+      .data('item-id');
+  };
 
 const generateLanding = function(){
     let html = `
@@ -135,26 +135,6 @@ const generateLanding = function(){
     html += '</ul>';
     return html;
   };
-
-
-
-const generateBookmark = function(){
-    return `
-        <div class='wrapper' item-id='${bookmarks.id}>
-        <h2>${bookmarks.title}</h2>
-        <div class='stars'>
-            <h3>${bookmarks.rating} star(s)</h3>
-        </div>
-        <details class='info'>
-            <p class='url'>'${bookmarks.url}'</p>
-            <p class='editable'>${bookmarks.details}</p>
-            <button class='remove'>Remove Bookmark</button>
-            <button class='edit'>Edit Bookmark</button>
-        </details>
-        </div class='wrapper'>
-    `;
-}
-
 
 const generateAddForm = function(){
     return `
