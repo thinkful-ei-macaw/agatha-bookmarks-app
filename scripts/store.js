@@ -24,7 +24,7 @@ const deleteCurrItem = function(id){
 
 const populate = function(){
     return api.getItems().then(bookmarks => {
-        bookmarks.forEach(bm => this.addItem(bm));
+        bookmarks.forEach(bm => addItem(bm));
     });
 }
 
@@ -37,7 +37,7 @@ const getFilter = function(){
 }
 
 const update = function(id, data) {
-    const currentBookmark = this.findById(id);
+    const currentBookmark = findById(id);
     Object.assign(currentBookmark, data);
   };
 

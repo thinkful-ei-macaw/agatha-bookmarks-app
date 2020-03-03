@@ -49,7 +49,7 @@ const updateItem = function(id, updateData){
     })
 }
 
-const deleteItem = function(){
+const deleteItem = function(id){
     return fetchFn(`${apiUrl}/${id}`, {
         method: 'DELETE'
     });

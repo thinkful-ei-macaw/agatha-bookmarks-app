@@ -34,13 +34,12 @@ const eventHandlerRemoveAll = function(){
 };
 
 const eventHandlerRemoveOne = function(){
-    $('main').on('click', '.remove', event =>{
+    $('main').on('click', '.delete', event =>{
         event.stopPropagation();
-        let id = getId(event.target);
+        let id = getId(event.currentTarget);
         api.deleteItem(id)
-            .then(() =>{
-                store.findById(id);
-            });
+            .then(() => store.deleteCurrItem(id))
+            .then(() => renderBaseLayout());
     });
 };
 
@@ -50,7 +49,7 @@ const eventHandlerEditBookmark = function(){
         let form = document.getElementById('newbmk');
         let formData = new FormData(form);
         const newBookmark = bmkObj(formData);
-        api.updateItem(newBookmark)
+        api.updateItem(id, newBookmark)
             .then(newBookmark => store.addItem(newBookmark))
             .then(() => renderBaseLayout())
     });
@@ -64,19 +63,19 @@ const eventHandlerCancelEdit = function(){
 };
 
 const eventHandlerToggle = function(){
-    $('#wrap').on('click', '.expand', event => {
+    $('main').on('click', '.expand', event => {
         store.resetDetails();
         const id = getId(event.currentTarget);
         store.toggleDetails(id);
         renderBaseLayout();
         eventHandlerClose();
         eventHandlerRemoveOne();
-        eventHandlerCancelEdit();
+        eventHandlerEditBookmark();
     });
   };
 
 const eventHandlerClose = function(){
-    $('#wrap').on('click', '.delete', event => {
+    $('main').on('click', '.close', event => {
       event.stopPropagation();
       const id = getId(event.currentTarget);
       store.toggleDetails(id);
@@ -131,7 +130,7 @@ const generateLanding = function(){
         <ul class="bmkList">`;
     store.store.bookmarks.forEach(bm => {
       if (bm.rating >= store.getFilter()) {
-        if (bm.showDetails && bm.rating) {
+        if (bm.details && bm.rating) {
           html += `
             <li data-item-id="${bm.id}" class="bmkItem">
                 <div class="expanded">
@@ -251,7 +250,6 @@ const renderEmptyLayout = function(){
 const eventHandlers = function(){
     eventHandlerAddNew();
     eventHandlerRemoveAll();
-    eventHandlerEditBookmark();
     eventHandlerToggle();
 }
 
