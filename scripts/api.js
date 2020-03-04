@@ -1,13 +1,13 @@
 'use strict'
 
-const apiUrl = 'https://thinkful-list-api.herokuapp.com/agatha/bookmarks';
+const apiUrl = 'https://thinkful-list-api.herokuapp.com/agatha/bookmarks/';
 
 
 
 
-const fetchFn = function (params) {
+const fetchFn = function (...params) {
     let error;
-    return fetch(params)
+    return fetch(...params)
         .then(response => {
             if(!response.ok){
                 error = {code: response.status};
@@ -28,11 +28,11 @@ const getItems = function(){
 }
 
 const createItem = function(name){
-    const newItem = JSON.stringify({name});
+    const newItem = JSON.stringify(name);
     return fetchFn(`${apiUrl}`,{
         method: 'POST',
         headers: {
-            'Content-Type': 'app/json'
+            'Content-Type': 'application/json'
         },
         body: newItem
     })
@@ -43,13 +43,13 @@ const updateItem = function(id, updateData){
     return fetchFn(`${apiUrl}/${id}`, {
         method: 'PATCH',
         headers: {
-            'Content-Type': 'app/json'
+            'Content-Type': 'application/json'
         },
         body: newData
     })
 }
 
-const deleteItem = function(){
+const deleteItem = function(id){
     return fetchFn(`${apiUrl}/${id}`, {
         method: 'DELETE'
     });

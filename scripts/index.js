@@ -3,158 +3,261 @@
 
 import api from './api.js';
 import store from './store.js';
+ 
 
-
-//Currently non-functional, would greatly appreciate granular feedback 
-
-//Event Handler Functions
+const eventHandlerAddNew = function(){
+    $('main').on('click', '.add', () => {
+        renderCreateBookmark();
+        eventHandlerCreate();
+        eventHandlerCancelEdit();
+    });
+};
 
 const eventHandlerCreate = function(){
-//this function will handle the creation of a new bookmark
-//that will appear at the bottom of the list
-    $('main').on('click', '.add', event => {
+    $('#newbmk').submit(event =>{
         event.preventDefault();
-        renderCreateBookmark();
-});
-}
+        let form = document.getElementById('newbmk');
+        let formData = new FormData(form);
+        const newBookmark = bmkObj(formData);
+        api.createItem(newBookmark)
+            .then(newBookmark => store.addItem(newBookmark))
+            .then(() => renderBaseLayout())
+    });
+};
 
-const eventHandlerRemoveAll = function(){
-    $('main').on('click', '.clear', event =>{
-        event.preventDefault();
-        renderEmptyLayout();
-    })
+const eventHandlerFilter = function(){
+    $('main').on('change', '.sortby', () =>{
+        let filterRate = Number($('.sortby').val());
+        store.setFilter(filterRate);
+        renderBaseLayout();
+    });
 }
 
 const eventHandlerRemoveOne = function(){
-    $('main').on('click', '.remove', event =>{
-        event.preventDefault();
-        let id = getId(event.target);
+    $('main').on('click', '.delete', event =>{
+        event.stopPropagation();
+        const id = getId(event.currentTarget);
         api.deleteItem(id)
-            .then(() =>{
-                store.findById(id);
-            })
+            .then(() => store.deleteCurrItem(id))
+            .then(() => renderBaseLayout())
+    });
+};
+
+const eventHandlerEditClick = function(){
+    $('main').on('click', '.edit', event =>{
+        const id = getId(event.currentTarget);
+        const bookmark = store.findById(id);
+        renderEdit(bookmark);
+        eventHandlerEditBookmark(id);
+        eventHandlerCancelEdit();
     })
 }
 
-const eventHandlerEditBookmark = function(){
-    $('main').on('click', '.edit', event =>{
+const eventHandlerEditBookmark = function(id){
+    $('form.updateform').submit(event =>{
         event.preventDefault();
-        //allows description to be editted
-    })
-}
+        let form = document.getElementById('updatebmk');
+        let formData = new FormData(form);
+        const newBookmark = bmkObj(formData);
+        api.updateItem(id, newBookmark)
+            .then(() => store.update(id, newBookmark))
+            .then(() => renderBaseLayout())
+    });
+};
 
 const eventHandlerCancelEdit = function(){
     $('main').on('click', '.cancel', event =>{
         event.preventDefault();
         renderBaseLayout();
-    })
+    });
+};
+
+const eventHandlerToggle = function(){
+    $('main').on('click', '.expand', event => {
+        store.resetDetails();
+        const id = getId(event.currentTarget);
+        store.toggleDetails(id);
+        renderBaseLayout();
+        eventHandlerClose();
+        eventHandlerRemoveOne();
+        eventHandlerEditClick();
+    });
+  };
+
+const eventHandlerClose = function(){
+    $('main').on('click', '.close', event => {
+      event.stopPropagation();
+      const id = getId(event.currentTarget);
+      store.toggleDetails(id);
+      renderBaseLayout();
+      eventHandlerClose();
+    });
+  };
+
+const bmkObj = function(formData){
+    let obj = {};
+    formData.forEach((val, name) => obj[name] = val);
+    return obj;
 }
 
-const eventHandlerSortBy = function(){
-    $('main').on('', '.sortby', event =>{
-        event.preventDefault();
-    })
-}
+const generateFilter = function(){
+    let currentRating = store.getFilter();
+    let html = '';
+    for (let i = 1; i <= 5; i++) {
+        html += `<option value="${i}" ${currentRating === i ? 'selected' : ''}>${'★'.repeat(i)}</option>`;
+    }
+    return html;
+};
 
-// Json
+const generateRating = currentRating => {
+    let html = '';
+    for (let i = 1; i <= 5; i++) {
+        html += `<option value="${i}" ${Number(currentRating) === i ? 'selected' : '' }>${'★'.repeat(i)}</option>`;
+    }
+    return html;
+};
 
-const jsonStringify = function(form){
-    let formData = new FormData(form[0]);
-    let object = {};
-    formData.forEach((val, name) => object[name] = val);
-    return JSON.stringify(object);
-}
-
-// Template Generation Functions
+const getId = function(item){
+    return $(item)
+      .closest('.bmkItem')
+      .data('item-id');
+  };
 
 const generateLanding = function(){
-    $('main').html(`
-    <fieldset>
-        <button class='add'>Add Bookmark</button>
-    </fieldset>
-        <button class='clear'>Remove all Bookmarks</button>
-        <select class='sortby'>Minimum Rating</select>
-            <article class='booktabs'>
-            
-            </article>`);
-}
-
-const generateBookmarkStrng = function(){
-    let bookmark = store.bookmarks.filter(bookmarks => bookmarks.rating >= store.filter)
-    bookmark = bookmark.map((bookmark) => generateBookmark(bookmark));
-    return bookmark.join('');
-}
-
-const generateBookmark = function(bookmark){
-    let mark = '';
-    mark = `
-        <div class='wrapper' item-id='${bookmarks.id}>
-        <h2>${bookmarks.title}</h2>
-        <div class='stars'>
-            <h3>${bookmarks.rating} star(s)</h3>
-        </div>
-        <details class='info'>
-            <p class='url'>'${bookmarks.url}'</p>
-            <p class='editable'>${bookmarks.details}</p>
-            <button class='remove'>Remove Bookmark</button>
-            <button class='edit'>Edit Bookmark</button>
-        </details>
-        </div class='wrapper'>
-    `;
-    return mark;
-}
+    let html = `
+    <div id='wrap'>
+        <fieldset>
+            <legend>
+                <button type='submit' class='add'>Add Bookmark</button>
+                <label for='sortby'>Sort:</label>
+                <select class='sortby'>
+                    ${generateFilter()}
+                </select>
+            </legend>
+        </fieldset>
+    </div>
+        <ul class="bmkList">`;
+    store.store.bookmarks.forEach(bm => {
+      if (bm.rating >= store.getFilter()) {
+        if (bm.details && bm.rating) {
+          html += `
+            <li data-item-id="${bm.id}" class="bmkItem">
+                <div class="expanded">
+                    <h3 id="bmktitle">${bm.title}</h3>
+                    <a class="visit" href="${bm.url}">Visit Site</a>
+                    <p>${bm.desc}</p>
+                    <button class="edit">Edit</button>
+                    <button class="close">Close</button>
+                    <button class="delete">Delete</button>
+                </div>
+            </li>`;
+        } else {
+          html += `
+                <li data-item-id="${bm.id}" class="bmkItem">
+                <button class="expand" role="button">
+                    <span class="bmkTitle">${bm.title}</span>
+                    <span class="bmkRating">${'★'.repeat(bm.rating)}</span>
+                </button>
+                </li>`;
+        }
+      }
+    });
+    html += '</ul>';
+    return html;
+  };
 
 const generateAddForm = function(){
-    $('fieldset').replaceWith(`
-        <form class='addform'>
-                <label>Title</label>
-                <input>
-                <label>URL</label>
-                <input>
-                <label>Description</label>
-                <input>
-            <div class='ratingradio'>
-                <h3>Rating</h3>
-                <label><input type='radio' value='one star' required>1 Star</label>
-                <label><input type='radio' value='two star' required>2 Stars</label>
-                <label><input type='radio' value='three star' required>3 Stars</label>
-                <label><input type='radio' value='four star' required>4 Stars</label>
-                <label><input type='radio' value='five star' required>5 Stars</label>
+    return `
+    <div id='wrap'>
+    <fieldset>
+        <legend>
+            <button class='addNew'>Add Bookmark</button>
+            <button class='cancel'>Cancel</button>
+            <label for='sortby'>Sort:</label>
+                <select class='sortby'>
+                ${generateFilter()}
+                </select>
+        </legend>
+        <form class='addform' id='newbmk'>
+            <div>
+                <label for="title">Title:</label>
+                <input type="text" id="title" name="title" required/>
             </div>
-        <button class='add'>Add Bookmark</button>
-        <button class='cancel'>Cancel</button>
+            <div>
+                <label for="url">URL:</label>
+                <input type="url" id="url" name="url" required/>
+            </div>
+            <div>
+                <label for="desc">Description:</label>
+                <input type="text" id="desc" name="desc" />
+            </div>
+            <div>
+                <label for="rating">Rating:</label>
+                <select id="ratingradio" name="rating">
+                    ${generateRating(1)}
+                </select>
+            </div>
+            <button type='submit'>Submit</button>
         </form>
-    `)
-}
+    </fieldset>
+    </div>`;
+  };
 
-const generateEmpty = function(){
-    
-}
+const generateEdit = function(bookmark){
+    return `
+        <form class='updateform' id="updatebmk">
+        <h3>Update bookmark below:</h3>
+        <div>
+            <label for="title">Name:</label>
+            <input type="text" id="title" name="title" value=${bookmark.title} required/>
+        </div>
+        <div>
+            <label for="url">URL:</label>
+            <input type="url" id="url" name="url" value=${bookmark.url} required/>
+        </div>
+        <div>
+            <label for="desc">Description:</label>
+            <input type="text" id="desc" name="desc" value="${bookmark.desc}" />
+        </div>
+        <div>
+            <label for="rating">Rating:</label>
+            <select id="rating" name="rating">
+                ${generateRating(bookmark.rating)}
+            </select>
+        </div>
+        <button class="editsubmit" type="submit">Update Bookmark</button>
+        <button class="cancel">Cancel</button>
+        </form>
+    `;
+};
 
-//Render Functions
+const render = function(target, component){
+    $(target).html(component);
+}
 
 const renderBaseLayout = function(){
-        generateLanding();
-    }
+    render('main', generateLanding());
+}
     
-    const renderCreateBookmark = function(){
-        generateAddForm();
-    }
-    
-    const renderEmptyLayout = function(){
-        generateEmpty();
-    }
-    
-
-
-const eventHandlers = function(){
-    eventHandlerCancelEdit();
-    eventHandlerCreate();
-    eventHandlerRemoveAll();
-    eventHandlerEditBookmark();
-    eventHandlerRemoveOne();
-    eventHandlerSortBy();
+const renderCreateBookmark = function(){
+    render('#wrap', generateAddForm());
 }
 
-$(eventHandlers);
-$(renderBaseLayout);
+const renderEdit = function(bookmark){
+    render('main', generateEdit(bookmark));
+}
+    
+const eventHandlers = function(){
+    eventHandlerAddNew();
+    eventHandlerFilter();
+    eventHandlerToggle();
+}
+
+const initiate = function(){
+    store.populate()
+        .then(() => renderBaseLayout())
+        .then(() => eventHandlers())
+    store.setFilter(1);
+}
+
+$(initiate);
