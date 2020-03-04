@@ -37,7 +37,7 @@ const getFilter = function(){
 }
 
 const update = function(id, data) {
-    const currentBookmark = findById(id);
+    const currentBookmark = this.findById(id);
     Object.assign(currentBookmark, data);
   };
 

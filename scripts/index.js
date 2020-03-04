@@ -19,19 +19,19 @@ const eventHandlerCreate = function(){
         let form = document.getElementById('newbmk');
         let formData = new FormData(form);
         const newBookmark = bmkObj(formData);
-        console.log(newBookmark)
         api.createItem(newBookmark)
             .then(newBookmark => store.addItem(newBookmark))
             .then(() => renderBaseLayout())
     });
 };
 
-const eventHandlerRemoveAll = function(){
-    $('main').on('click', '.clear', event =>{
-        event.preventDefault();
-        renderEmptyLayout();
+const eventHandlerFilter = function(){
+    $('main').on('change', '.sortby', () =>{
+        let filterRate = Number($('.sortby').val());
+        store.setFilter(filterRate);
+        renderBaseLayout();
     });
-};
+}
 
 const eventHandlerRemoveOne = function(){
     $('main').on('click', '.delete', event =>{
@@ -40,7 +40,6 @@ const eventHandlerRemoveOne = function(){
         api.deleteItem(id)
             .then(() => store.deleteCurrItem(id))
             .then(() => renderBaseLayout())
-            .catch(error => renderError(error));
     });
 };
 
@@ -54,14 +53,15 @@ const eventHandlerEditClick = function(){
     })
 }
 
-const eventHandlerEditBookmark = function(){
-    $('.edit').submit(event =>{
+const eventHandlerEditBookmark = function(id){
+    $('form.updateform').submit(event =>{
         event.preventDefault();
-        let form = document.getElementById('newbmk');
+        console.log('help')
+        let form = document.getElementById('#updatebmk');
         let formData = new FormData(form);
         const newBookmark = bmkObj(formData);
         api.updateItem(id, newBookmark)
-            .then(newBookmark => store.addItem(newBookmark))
+            .then(() => store.update(id, newBookmark))
             .then(() => renderBaseLayout())
     });
 };
@@ -130,7 +130,6 @@ const generateLanding = function(){
         <fieldset>
             <legend>
                 <button type='submit' class='add'>Add Bookmark</button>
-                <button class='clear'>Remove all Bookmarks</button>
                 <label for='sortby'>Sort:</label>
                 <select class='sortby'>
                     ${generateFilter()}
@@ -175,7 +174,6 @@ const generateAddForm = function(){
         <legend>
             <button class='addNew'>Add Bookmark</button>
             <button class='cancel'>Cancel</button>
-            <button class='clear'>Remove all Bookmarks</button>
             <label for='sortby'>Sort:</label>
                 <select class='sortby'>
                 ${generateFilter()}
@@ -200,32 +198,32 @@ const generateAddForm = function(){
                     ${generateRating(1)}
                 </select>
             </div>
-            <button type='submit' class='please'>Submit</button>
+            <button type='submit'>Submit</button>
         </form>
     </fieldset>
     </div>`;
   };
 
-const generateEdit = function(){
+const generateEdit = function(bookmark){
     return `
-        <form id="update" class="updatebmk">
+        <form class='updateform' id="updatebmk">
         <h3>Update bookmark below:</h3>
         <div>
             <label for="title">Name:</label>
-            <input type="text" id="title" name="title" value=${store.store.bookmarks.title} required/>
+            <input type="text" id="title" name="title" value=${bookmark.title} required/>
         </div>
         <div>
             <label for="url">URL:</label>
-            <input type="url" id="url" name="url" value=${store.store.bookmarks.url} required/>
+            <input type="url" id="url" name="url" value=${bookmark.url} required/>
         </div>
         <div>
             <label for="desc">Description:</label>
-            <input type="text" id="desc" name="desc" value="${store.store.bookmarks.desc}" />
+            <input type="text" id="desc" name="desc" value="${bookmark.desc}" />
         </div>
         <div>
             <label for="rating">Rating:</label>
             <select id="rating" name="rating">
-                ${generateRating(store.store.bookmarks.rating)}
+                ${generateRating(bookmark.rating)}
             </select>
         </div>
         <button class="editsubmit" type="submit">Update Bookmark</button>
@@ -246,13 +244,13 @@ const renderCreateBookmark = function(){
     render('#wrap', generateAddForm());
 }
 
-const renderEdit = function(){
-    render('#wrap', generateEdit(store.bookmark));
+const renderEdit = function(bookmark){
+    render('main', generateEdit(bookmark));
 }
     
 const eventHandlers = function(){
     eventHandlerAddNew();
-    eventHandlerRemoveAll();
+    eventHandlerFilter();
     eventHandlerToggle();
 }
 
