@@ -19,7 +19,9 @@ const findById = function(id){
 }
 
 const deleteCurrItem = function(id){
-    store.bookmarks = store.bookmarks.filter(currentItem => currentItem.id !== id);
+    const currentBookmark = this.findById(id);
+    const splicetar = store.bookmarks.indexOf(currentBookmark);
+    store.bookmarks.splice(splicetar, 1);
 }
 
 const populate = function(){

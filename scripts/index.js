@@ -56,8 +56,7 @@ const eventHandlerEditClick = function(){
 const eventHandlerEditBookmark = function(id){
     $('form.updateform').submit(event =>{
         event.preventDefault();
-        console.log('help')
-        let form = document.getElementById('#updatebmk');
+        let form = document.getElementById('updatebmk');
         let formData = new FormData(form);
         const newBookmark = bmkObj(formData);
         api.updateItem(id, newBookmark)
